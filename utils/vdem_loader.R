@@ -30,9 +30,8 @@ vdem_data_fun <- function(data, file_name) {
 
 # store data in folder
 if (!file.exists(vdem_file_folder)) {
+  dir.create("data")
   vdem_data_fun(vdemdata::vdem, vdem_file_folder)
 } else {
   print("File already exists.")
 }
-
-
