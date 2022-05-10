@@ -4,6 +4,7 @@ library(sf)
 library(tmap)
 library(cowplot)
 library(corrr)
+library(ggdendro)
 
 
 # data --------------------------------------------------------------------
@@ -170,6 +171,26 @@ agg_plot <- tm_shape(test_forecasts_year_agg_model) +
 agg_plot
 
 # feature analysis xgboost ------------------------------------------------
+# correlation plot
+most_important_features_xgb %>% 
+  correlate() %>% 
+  # rearrange() %>% 
+  rplot() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# correlation network plot
+most_important_features_xgb %>% 
+  correlate() %>% 
+  # rearrange() %>% 
+  network_plot()
+
+# dendrogram
+most_important_features_xgb %>% 
+  correlate() %>% 
+  as_tibble() %>%
+  column_to_rownames("term") %>% 
+  dist() %>% 
+  hclust %>% 
+  ggdendrogram(rotate = T)
 
 
-  
