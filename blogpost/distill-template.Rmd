@@ -1,0 +1,117 @@
+---
+title: "Predicting Regime Change using V-Dem Data"
+description: |
+  Add a short description of your article here (i.e. "We present a deep learning approach to classifying labeled texts and phrases in party manifestos, using the coding scheme and documents from the Manifesto Project Corpus.")
+author: 
+  - name: Lukas Warode
+    url: https://lwarode.github.io
+  - name: Florian Winkller
+  - name: Anna-Lisa Wirth
+date: "`r Sys.Date()`" 
+categories: 
+  - Political Science, Democratic Backsliding, Machine Learning, XGBoost, SVM
+creative_commons: CC BY
+repository_url: https://github.com/lwarode/ML_Lab-1_Group-C
+output: 
+  distill::distill_article: 
+    self_contained: false
+preview: figures/BERTfig3.png
+bibliography: bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Load dependencies 
+library(reticulate) # For rendering Python code 
+```
+
+## Abstract 
+
+An abstract should concisely (less than 300 words) motivate the problem, describe your aims, describe your contribution, and highlight your main finding(s). 
+
+## Introduction / Background
+
+The introduction explains the problem, why it's difficult, interesting, or important, how and why current methods succeed/fail at the problem, and explains the key ideas of your approach and results. Though an introduction covers similar material as an abstract, the introduction gives more space for motivation, detail, references to existing work, and to capture the reader's interest.
+
+## Related Work 
+
+This section helps the reader understand the research context of your work, by providing an overview of existing work in the area.
+
+- You might discuss: papers that inspired your approach, papers that you use as baselines, papers proposing alternative approaches to the problem, papers applying your methods to different tasks, etc.
+
+- This section shouldn't go into deep detail in any one paper (for example, there probably shouldn't be any equations) -- instead it should explain how the papers relate to each other, and how they relate to your work.
+
+**See below for an example of how to cite related work in Markdown.**
+
+Bidirectional Encoder Representations from Transformers (BERT) have proven successful in prior attempts to classify phrases and short texts [@devlin2018bert].
+
+**Footnotes and Sidenotes**
+
+You can use footnotes ^[This is a footnote. You can view this by hovering over the footnote in text.] or sidenotes to elaborate on a concept throughout the paper. 
+
+<aside>
+This is a side note. 
+</aside>
+
+## Proposed Method 
+
+This section details your approach(es) to the problem. For example, this is where you describe the architecture of your model, and any other key methods or algorithms.
+
+- You should be specific when describing your main approaches -- you probably want to include equations and figures.
+- You should also describe your baseline(s). Depending on space constraints, and how standard your baseline is, you might do this in detail, or simply refer the reader to some other paper for the details. 
+- If any part of your approach is original, make it clear (so we can give you credit!). For models and techniques that aren't yours, provide references.
+- If you're using any code that you didn't write yourself, make it clear and provide a reference or link. When describing something you coded yourself, make it clear (so we can give you credit!).
+
+**Below is an example of a figure:**
+
+```{r fig1, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Model architecture"}
+knitr::include_graphics("figures/BERTfig3.png")
+```
+
+## Experiments 
+
+**Data**: Describe the dataset(s) you are using (provide references). If it's not already clear, make sure the associated task is clearly described.
+ 
+**Software**: Briefly list (and cite) software you used.
+
+**Hardware**: If relevant, list hardware resources you used.
+
+**Evaluation method**: Describe the evaluation metric(s) you used, plus any other details necessary to understand your evaluation.
+
+**Experimental details**: How you ran your experiments (e.g. model configurations, learning rate, training time, etc.) 
+
+**Results**: Report the quantitative results that you have found so far. Use a table or plot to compare multiple results and compare against baselines. 
+
+**Comment on quantitative results**: Are they what you expected? Better than you expected? Worse than you expected? Why do you think that is? What does this tell you about what you should do next? Including training curves might be useful to discuss whether things are training effectively.
+
+***Note***: **Feel free to use some of the code from your project to explain your experiments. See example code block below.**
+
+```{python bertcnn model parameters, echo = TRUE, eval = FALSE}
+OUTPUT_DIM = len(LABEL.vocab)
+DROPOUT = 0.5
+N_FILTERS = 100
+FILTER_SIZES = [2,3]
+
+model = BERTCNN(bert,
+                OUTPUT_DIM,
+                DROPOUT,
+                N_FILTERS,
+                FILTER_SIZES)
+```
+
+## Analysis 
+
+Your report should include some qualitative evaluation. That is, try to understand your system (how it works, when it succeeds and when it fails) by measuring or inspecting key characteristics or outputs of your model.
+
+- Types of qualitative evaluation include: commenting on selected examples, error analysis, measuring the performance metric for certain subsets of the data, ablation studies, comparing the behaviors of two systems beyond just the performance metric, and visualizing attention distributions or other activation heatmaps.
+
+- The Practical Tips lecture notes has a detailed section on qualitative evaluation -- you may find it useful to reread it.
+
+## Conclusion(s)
+
+Summarize the main findings of your project, and what you learned. Highlight your achievements, and note the primary limitations of your work. If you like, you can describe avenues for future work.
+
+## Acknowledgments 
+
+List acknowledgments, if any. For example, if someone provided you a dataset, or you used someone else's resources, this is a good place to acknowledge the help or support you received.
