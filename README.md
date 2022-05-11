@@ -1,4 +1,5 @@
 # ML_Lab-1_Group-C
+
 Hertie School Machine Learning (GRAD-C24) Class | Lab 1 | Project Group C
 
 ## Group Members
@@ -8,3 +9,5 @@ Hertie School Machine Learning (GRAD-C24) Class | Lab 1 | Project Group C
 - Lukas Warode
 
 ## Project Topic: Predicting (Intra-)Regime Transition/Change using V-Dem Data
+
+## [Blogpost](https://raw.githack.com/lwarode/ML_Lab-1_Group-C/main/blogpost/blogpost.html)
