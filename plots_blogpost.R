@@ -54,6 +54,13 @@ plot_2021_xgb <- tm_shape(xgb_forecasts_2021) +
 
 plot_2021_xgb
 
+tmap_save(
+  plot_2021_xgb,
+  "figures/plot_2021_xgb.png",
+  width = 2500,
+  height = 1400
+)
+
 # svm
 svm_forecasts_2021 <- World %>% 
   fuzzy_left_join(test_forecast_svm, by = c("sovereignt" = "country_name"), match_fun = ci_str_detect) %>% 
@@ -71,6 +78,13 @@ plot_2021_svm <- tm_shape(svm_forecasts_2021) +
 
 plot_2021_svm
 
+tmap_save(
+  plot_2021_svm,
+  "figures/plot_2021_svm.png",
+  width = 2500,
+  height = 1400
+)
+
 forecasts_2021_pl <- plot_grid(
   title = ggdraw() + draw_label("Test Forecasts, 2021", size = 20),
   tmap_grob(plot_2021_xgb),
@@ -82,7 +96,11 @@ forecasts_2021_pl <- plot_grid(
 
 forecasts_2021_pl
 
-# test set forecasts ------------------------------------------------------
+ggsave(
+  "figures/forecasts_2021_pl.png",
+  forecasts_2021_pl
+)
+
 core_vars_xgb_test <- test_forecast_xgb %>% 
   select(1:6, final_pred, final_pred_prob) %>% 
   mutate(model = "xgb") 
@@ -172,25 +190,84 @@ agg_plot
 
 # feature analysis xgboost ------------------------------------------------
 # correlation plot
-most_important_features_xgb %>% 
+most_important_features_xgb_df <- most_important_features_xgb %>% 
   correlate() %>% 
+  mutate(
+    var_name = case_when(
+      term == "lagged_diff_year_prior_v2x_elecoff" ~ "Elected officials index",
+      term == "lagged_diff_year_prior_v2elembaut" ~ "EMB autonomy",
+      term == "lagged_v2ellocons" ~ "Lower chamber election consecutive",
+      term == "lagged_v2xlg_leginter" ~ "Legislature closed down or aborted",
+      term == "lagged_v2clslavem" ~ "Freedom from forced labor for men",
+      term == "lagged_v2lginvstp" ~ "Legislature investigates in practice",
+      term == "lagged_diff_year_prior_v2x_neopat" ~ "Neopatrimonial Rule Index",
+      term == "lagged_v2dlconslt" ~ "Range of consultation",
+      term == "lagged_is_closed_autocracy" ~ "Closed autocracy",
+      term == "lagged_v2x_clpriv" ~ "Private civil liberties index"
+    )
+  )
+
+col_names <- most_important_features_xgb_df %>% 
+  select(-term, -var_name) %>% 
+  names
+
+var_labels <- most_important_features_xgb_df %>% 
+  pull(var_name)
+
+colnames(most_important_features_xgb_df)[which(colnames(most_important_features_xgb_df) %in% col_names)] <- var_labels
+
+feat_importance_corr_pl <- most_important_features_xgb_df %>% 
+  select(-term) %>% 
+  rename(term = var_name) %>% 
   # rearrange() %>% 
   rplot() + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(colour = "Correlation\n")
+
+feat_importance_corr_pl
+
+ggsave(
+  "figures/feat_importance_corr_pl.png",
+  plot = feat_importance_corr_pl,
+  width = (16/9) * 5,
+  height =  5
+)
 
 # correlation network plot
-most_important_features_xgb %>% 
-  correlate() %>% 
+feat_importance_network_pl <- most_important_features_xgb_df %>% 
+  select(-term) %>% 
+  rename(term = var_name) %>% 
   # rearrange() %>% 
-  network_plot()
+  network_plot() 
+
+feat_importance_network_pl
+
+ggsave(
+  "figures/feat_importance_network_pl.png",
+  plot = feat_importance_network_pl,
+  width = (16/9) * 6,
+  height =  6
+)
+
+
+feat_importance_network_pl
 
 # dendrogram
-most_important_features_xgb %>% 
-  correlate() %>% 
+feat_importance_dendrogram_pl <- most_important_features_xgb_df %>% 
+  select(-term) %>% 
+  rename(term = var_name) %>% 
   as_tibble() %>%
   column_to_rownames("term") %>% 
   dist() %>% 
   hclust %>% 
   ggdendrogram(rotate = T)
 
+feat_importance_dendrogram_pl
+
+ggsave(
+  "figures/feat_importance_dendrogram_pl.png",
+  plot = feat_importance_dendrogram_pl,
+  width = (16/9) * 6,
+  height =  6
+)
 
